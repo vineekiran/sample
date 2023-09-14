@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config2" doc:name="HTTP Listener config" doc:id="420bc17f-d6c8-4c6e-9643-00567a0fb5ec" >
+		<http:listener-connection host="0.0.0.0" port="8083" />
+	</http:listener-config>
+	<flow name="roundFlow" doc:id="de1de309-b250-4ad1-af88-9cee21a90c9f" >
+		<http:listener doc:name="Listener" doc:id="0a750ff5-a298-4b52-a745-c1fba4aa936a" config-ref="HTTP_Listener_config2" path="/round"/>
+		<round-robin doc:name="Round Robin" doc:id="812444d2-af83-4393-b299-a42f290cd72e" >
+			<route >
+				<logger level="INFO" doc:name="Logger" doc:id="9d9675a6-97e3-40c8-9145-41a0d92c31ae" message="first"/>
+			</route>
+			<route >
+				<logger level="INFO" doc:name="Logger" doc:id="ef564fdc-0739-41cb-9b57-477415b5de29" message="second"/>
+			</route>
+			<route >
+				<logger level="INFO" doc:name="Logger" doc:id="ab664563-d2fe-480b-87e1-542c567c9748" message="third"/>
+			</route>
+		</round-robin>
+	</flow>
+</mule>

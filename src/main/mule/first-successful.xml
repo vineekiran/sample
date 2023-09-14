@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config1" doc:name="HTTP Listener config" doc:id="e71a4117-5e42-4124-b616-2babdf967156" >
+		<http:listener-connection host="0.0.0.0" port="8082" />
+	</http:listener-config>
+	<flow name="first-successfulFlow" doc:id="b3989b06-7f32-4939-914b-d99e25299514" >
+		<http:listener doc:name="Listener" doc:id="17a43f6a-bb2d-4689-a499-a7452c6da872" config-ref="HTTP_Listener_config1" path="/first"/>
+		<set-variable value="#[attributes.queryParams.a]" doc:name="Set Variable" doc:id="90be7bbf-ab66-4254-ae45-6f5f424b2a91" variableName="a"/>
+		<set-variable value="#[attributes.queryParams.b]" doc:name="Set Variable" doc:id="9bf39e93-7684-4305-84be-389dd692386d" variableName="b"/>
+		<first-successful doc:name="First Successful" doc:id="f4109bda-4ea9-44f0-99d9-e4ee9c2632ee" >
+			<route >
+				<ee:transform doc:name="Transform Message" doc:id="bf4de95c-14b7-4ad2-a7bb-b8f3c1a6aeca" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"div": (vars.a / vars.b)
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</route>
+			<route >
+				<ee:transform doc:name="Transform Message" doc:id="fbe3eaa9-a99c-44ea-972c-d2155ae65362" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"sum":vars.a + vars.b
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</route>
+		</first-successful>
+	</flow>
+</mule>

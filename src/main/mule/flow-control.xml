@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="ebaf5228-f5f2-4006-82a2-8de4de63c66a" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="flow-controlFlow" doc:id="391199d2-00c9-4ead-a346-654d45b2d36f" >
+		<http:listener doc:name="Listener" doc:id="0532054e-d70f-4d1e-8f81-1a68877c8fe2" config-ref="HTTP_Listener_config" path="/choice"/>
+		<set-variable value="#[attributes.queryParams.a]" doc:name="Set Variable" doc:id="6a61d5d8-9bcc-4e87-9779-77e34eb3a2a2" variableName="a"/>
+		<choice doc:name="Choice" doc:id="809b84f4-0479-487d-afcd-5e55f3dff888" >
+			<when expression="#[vars.a &gt;= 35 and vars.a &lt;=50]">
+				<logger level="INFO" doc:name="Logger" doc:id="d0cd86bc-a45b-4f43-a6c2-48a7710a3bae" message="value is greater than 35"/>
+			</when>
+			<when expression="#[vars.a &gt;50 and vars.a &lt; 70]">
+				<logger level="INFO" doc:name="Logger" doc:id="3305b433-2e31-4925-aab5-2185dae7d28b" message="value is greater than 50"/>
+			</when>
+			<when expression="#[vars.a &gt;70]">
+				<logger level="INFO" doc:name="Logger" doc:id="58f037ec-db5e-4b4b-83c3-340ab71c9cd3" message="value is greater than 70"/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="a2482e1f-1696-4e3c-8ef2-a9bae757e2b5" message="value is less than 35"/>
+			</otherwise>
+		</choice>
+	</flow>
+</mule>
